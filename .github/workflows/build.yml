@@ -15,12 +15,12 @@ jobs:
         shell: bash
         id: compile
         env: 
-          BUILD_FILES: "bin/Debug/MCGalaxy.exe bin/Debug/MCGalaxy.pdb bin/Debug/MCGalaxyCLI.exe bin/Debug/MCGalaxyCLI.pdb bin/Debug/MCGalaxy_.dll  bin/Debug/MCGalaxy_.dll.pdb"
+          BUILD_FILES: "bin/Debug/MCGalaxy.exe bin/Debug/MCGalaxy.pdb bin/Debug/MCGalaxyCLI.exe bin/Debug/MCGalaxyCLI.pdb bin/Debug/MCGalaxy_.dll  bin/Debug/MCGalaxy_.pdb"
           CONFIGURATION: "Debug"
         run: |
           msbuild MCGalaxy.sln
           zip MCGalaxy-net.zip ${{ env.BUILD_FILES }}
-          rm bin/Debug/MCGalaxy_.dll bin/Debug/MCGalaxy_.dll.pdb
+          rm bin/Debug/MCGalaxy_.dll bin/Debug/MCGalaxy_.pdb
           msbuild MCGalaxy/MCGalaxy_.csproj /t:Rebuild /p:DefineConstants="TEN_BIT_BLOCKS"
           zip MCGalaxy-net-infid.zip ${{ env.BUILD_FILES }}
 
@@ -35,8 +35,25 @@ jobs:
         with:
           SOURCE_FILE: 'MCGalaxy-net.zip'
           DEST_NAME: 'MCGalaxy-net.zip'
+          
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
           SOURCE_FILE: 'MCGalaxy-net-infid.zip'
           DEST_NAME: 'MCGalaxy-net-infid.zip'
+          
+
+  build-dotnet:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore CLI/MCGalaxyCLI_dotnet.csproj
+    - name: Build
+      run: dotnet build CLI/MCGalaxyCLI_dotnet.csproj --no-restore
