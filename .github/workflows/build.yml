@@ -18,7 +18,7 @@ jobs:
           CONFIGURATION: "Debug"
         run: |
           msbuild MCGalaxy.sln
-          cp bin/Debug bin/Debug_normal
+          cp -R bin/Debug bin/Debug_normal
           rm bin/Debug/MCGalaxy_.dll bin/Debug/MCGalaxy_.pdb
           msbuild MCGalaxy/MCGalaxy_.csproj /t:Rebuild /p:DefineConstants="TEN_BIT_BLOCKS"
 
