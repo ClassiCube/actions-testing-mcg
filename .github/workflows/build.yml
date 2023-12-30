@@ -18,7 +18,7 @@ jobs:
           CONFIGURATION: "Debug"
         run: |
           msbuild MCGalaxy.sln
-          zip MCGalaxy-net.zip bin/Debug/MCGalaxy.exe bin/Debug/MCGalaxyCLI.exe bin/Debug/MCGalaxy_.dll
+          zip MCGalaxy-net.zip bin/Debug/MCGalaxy.exe bin/Debug/MCGalaxy.pdb bin/Debug/MCGalaxyCLI.exe bin/Debug/MCGalaxyCLI.mdb bin/Debug/MCGalaxy_.dll
 
       - uses: ./.github/actions/notify_failure
         if: ${{ always() && steps.compile.outcome == 'failure' }}
