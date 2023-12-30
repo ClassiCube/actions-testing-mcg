@@ -70,5 +70,5 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile_net.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'MCGalaxy-dotnet.zip'
+          SOURCE_FILE: 'CLI/bin/Debug/net6.0'
           DEST_NAME: 'MCGalaxy-dotnet.zip'
