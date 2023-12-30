@@ -15,10 +15,14 @@ jobs:
         shell: bash
         id: compile
         env: 
+          BUILD_FILES: "bin/Debug/MCGalaxy.exe bin/Debug/MCGalaxy.pdb bin/Debug/MCGalaxyCLI.exe bin/Debug/MCGalaxyCLI.pdb bin/Debug/MCGalaxy_.dll  bin/Debug/MCGalaxy_.dll.pdb"
           CONFIGURATION: "Debug"
         run: |
           msbuild MCGalaxy.sln
-          zip MCGalaxy-net.zip bin/Debug/MCGalaxy.exe bin/Debug/MCGalaxy.pdb bin/Debug/MCGalaxyCLI.exe bin/Debug/MCGalaxyCLI.mdb bin/Debug/MCGalaxy_.dll
+          zip MCGalaxy-net.zip ${{ env.BUILD_FILES }}
+          rm bin/Debug/MCGalaxy_.dll bin/Debug/MCGalaxy_.dll.pdb
+          msbuild MCGalaxy/MCGalaxy_.csproj /t:Rebuild /p:DefineConstants="TEN_BIT_BLOCKS"
+          zip MCGalaxy-net-infid.zip ${{ env.BUILD_FILES }}
 
       - uses: ./.github/actions/notify_failure
         if: ${{ always() && steps.compile.outcome == 'failure' }}
@@ -31,3 +35,8 @@ jobs:
         with:
           SOURCE_FILE: 'MCGalaxy-net.zip'
           DEST_NAME: 'MCGalaxy-net.zip'
+      - uses: ./.github/actions/upload_build
+        if: ${{ always() && steps.compile.outcome == 'success' }}
+        with:
+          SOURCE_FILE: 'MCGalaxy-net-infid.zip'
+          DEST_NAME: 'MCGalaxy-net-infid.zip'
