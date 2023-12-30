@@ -57,7 +57,9 @@ jobs:
         run: dotnet restore CLI/MCGalaxyCLI_dotnet.csproj
       - name: Build
         id: compile_net
-        run: dotnet build CLI/MCGalaxyCLI_dotnet.csproj --no-restore
+        run: |
+          dotnet build CLI/MCGalaxyCLI_dotnet.csproj --no-restore
+          zip MCGalaxy-dotnet.zip CLI/bin/Debug/net6.0/MCGalaxyCLI_dotnet.dll CLI/bin/Debug/net6.0/MCGalaxy_dotnet.dll
         
       - uses: ./.github/actions/notify_failure
         if: ${{ always() && steps.compile_net.outcome == 'failure' }}
@@ -68,5 +70,5 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile_net.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'CLI/bin/Debug/net6.0/MCGalaxyCLI_dotnet.dll'
-          DEST_NAME: 'MCGalaxyCLI_dotnet.dl'
+          SOURCE_FILE: 'MCGalaxy-dotnet.zip'
+          DEST_NAME: 'MCGalaxy-dotnet.zip'
