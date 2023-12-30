@@ -34,13 +34,13 @@ jobs:
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
           SOURCE_FILE: 'MCGalaxy-net.zip'
-          DEST_NAME: 'MCGalaxy-net.zip'
+          DEST_NAME: 'MCGalaxy.zip'
           
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
           SOURCE_FILE: 'MCGalaxy-net-infid.zip'
-          DEST_NAME: 'MCGalaxy-net-infid.zip'
+          DEST_NAME: 'MCGalaxy-infid.zip'
           
 
   build-dotnet:
@@ -68,5 +68,5 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile_net.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'CLI/bin/Debug/net6.0/MCGalaxyCLI_dotnet.dl'
+          SOURCE_FILE: 'CLI/bin/Debug/net6.0/MCGalaxyCLI_dotnet.dll'
           DEST_NAME: 'MCGalaxyCLI_dotnet.dl'
