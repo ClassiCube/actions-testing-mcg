@@ -14,13 +14,11 @@ jobs:
       - name: Compile MCGalaxy using mono
         shell: bash
         id: compile
-        env:
-          CONFIGURATION: "Debug"
         run: |
-          msbuild MCGalaxy.sln
-          cp -R bin/Debug bin/Debug_normal
-          rm bin/Debug/MCGalaxy_.dll bin/Debug/MCGalaxy_.pdb
-          msbuild MCGalaxy/MCGalaxy_.csproj /t:Rebuild /p:DefineConstants="TEN_BIT_BLOCKS"
+          msbuild MCGalaxy.sln /p:Configuration=Release
+          cp -R bin/Release bin/Release_normal
+          rm bin/Debug/MCGalaxy_.dll bin/Release/MCGalaxy_.pdb
+          msbuild MCGalaxy/MCGalaxy_.csproj /p:Configuration=Release /t:Rebuild /p:DefineConstants="TEN_BIT_BLOCKS"
 
       - uses: ./.github/actions/notify_failure
         if: ${{ always() && steps.compile.outcome == 'failure' }}
@@ -31,14 +29,14 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'bin/Debug_normal'
-          DEST_NAME: 'MCGalaxy.zip'
+          SOURCE_FILE: 'bin/Release_normal'
+          DEST_NAME: 'MCGalaxy'
           
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'bin/Debug'
-          DEST_NAME: 'MCGalaxy-infid.zip'
+          SOURCE_FILE: 'bin/Release'
+          DEST_NAME: 'MCGalaxy-infid'
           
 
   build-dotnet:
@@ -57,7 +55,8 @@ jobs:
         id: compile_net
         run: |
           dotnet build CLI/MCGalaxyCLI_dotnet.csproj --no-restore
-          zip MCGalaxy-dotnet.zip CLI/bin/Debug/net6.0/MCGalaxyCLI_dotnet.dll CLI/bin/Debug/net6.0/MCGalaxy_dotnet.dll
+      - name: Publish
+        run: dotnet publish CLI/MCGalaxyCLI_dotnet.csproj
         
       - uses: ./.github/actions/notify_failure
         if: ${{ always() && steps.compile_net.outcome == 'failure' }}
@@ -69,4 +68,4 @@ jobs:
         if: ${{ always() && steps.compile_net.outcome == 'success' }}
         with:
           SOURCE_FILE: 'CLI/bin/Debug/net6.0'
-          DEST_NAME: 'MCGalaxy-dotnet'
+          DEST_NAME: 'MCGalaxy-dotnet6.0'
