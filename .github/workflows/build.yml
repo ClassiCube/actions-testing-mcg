@@ -87,3 +87,13 @@ jobs:
         with:
           SOURCE_FILE: 'CLI/bin/Debug/net6.0/linux-x64/publish'
           DEST_NAME: 'MCGalaxy-linux64-standalone'
+          
+      # publish standalone macOS binaries
+      - name: Publish-mac64
+        run: dotnet publish CLI/MCGalaxyCLI_dotnet.csproj -r mac-x64 --self-contained
+          
+      - uses: ./.github/actions/upload_build
+        if: ${{ always() && steps.compile_net.outcome == 'success' }}
+        with:
+          SOURCE_FILE: 'CLI/bin/Debug/net6.0/mac-x64/publish'
+          DEST_NAME: 'MCGalaxy-mac64-standalone'
