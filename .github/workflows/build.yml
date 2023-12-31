@@ -17,7 +17,7 @@ jobs:
         run: |
           msbuild MCGalaxy.sln /p:Configuration=Release
           cp -R bin/Release bin/Release_normal
-          rm bin/Debug/MCGalaxy_.dll bin/Release/MCGalaxy_.pdb
+          rm bin/Release/MCGalaxy_.dll bin/Release/MCGalaxy_.pdb
           msbuild MCGalaxy/MCGalaxy_.csproj /p:Configuration=Release /t:Rebuild /p:DefineConstants="TEN_BIT_BLOCKS"
 
       - uses: ./.github/actions/notify_failure
@@ -55,8 +55,8 @@ jobs:
         id: compile_net
         run: |
           dotnet build CLI/MCGalaxyCLI_dotnet.csproj --no-restore
-      - name: Publish
-        run: dotnet publish CLI/MCGalaxyCLI_dotnet.csproj
+      - name: Publish-win64
+        run: dotnet publish CLI/MCGalaxyCLI_dotnet.csproj -r win-x64 --self-contained
         
       - uses: ./.github/actions/notify_failure
         if: ${{ always() && steps.compile_net.outcome == 'failure' }}
