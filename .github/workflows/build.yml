@@ -105,7 +105,7 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile_net.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'CLI/bin/Debug/net8.0/win-x64/publish'
+          SOURCE_FILE: 'CLI/bin/Release/net8.0/win-x64/publish'
           DEST_NAME: 'MCGalaxy-win64-standalone'
           
       # publish standalone linux binaries
@@ -115,7 +115,7 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile_net.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'CLI/bin/Debug/net8.0/linux-x64/publish'
+          SOURCE_FILE: 'CLI/bin/Release/net8.0/linux-x64/publish'
           DEST_NAME: 'MCGalaxy-linux64-standalone'
           
       # publish standalone macOS binaries
@@ -125,5 +125,5 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile_net.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'CLI/bin/Debug/net8.0/osx-x64/publish'
+          SOURCE_FILE: 'CLI/bin/Release/net8.0/osx-x64/publish'
           DEST_NAME: 'MCGalaxy-mac64-standalone'
