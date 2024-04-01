@@ -68,36 +68,6 @@ jobs:
           SOURCE_FILE: 'CLI/bin/Debug/net6.0'
           DEST_NAME: 'MCGalaxy-dotnet6.0'
           
-      # publish standalone windows binaries
-      - name: Publish-win64
-        run: dotnet publish CLI/MCGalaxyCLI_dotnet6.csproj -r win-x64 --self-contained
-          
-      - uses: ./.github/actions/upload_build
-        if: ${{ always() && steps.compile_net.outcome == 'success' }}
-        with:
-          SOURCE_FILE: 'CLI/bin/Debug/net6.0/win-x64/publish'
-          DEST_NAME: 'MCGalaxy-win64-standalone'
-          
-      # publish standalone linux binaries
-      - name: Publish-linux64
-        run: dotnet publish CLI/MCGalaxyCLI_dotnet6.csproj -r linux-x64 --self-contained
-          
-      - uses: ./.github/actions/upload_build
-        if: ${{ always() && steps.compile_net.outcome == 'success' }}
-        with:
-          SOURCE_FILE: 'CLI/bin/Debug/net6.0/linux-x64/publish'
-          DEST_NAME: 'MCGalaxy-linux64-standalone'
-          
-      # publish standalone macOS binaries
-      - name: Publish-mac64
-        run: dotnet publish CLI/MCGalaxyCLI_dotnet6.csproj -r osx-x64 --self-contained
-          
-      - uses: ./.github/actions/upload_build
-        if: ${{ always() && steps.compile_net.outcome == 'success' }}
-        with:
-          SOURCE_FILE: 'CLI/bin/Debug/net6.0/osx-x64/publish'
-          DEST_NAME: 'MCGalaxy-mac64-standalone'
-          
 
   build-dotnet8:
     if: github.ref_name == github.event.repository.default_branch
@@ -127,3 +97,33 @@ jobs:
         with:
           SOURCE_FILE: 'CLI/bin/Debug/net8.0'
           DEST_NAME: 'MCGalaxy-dotnet8.0'
+          
+      # publish standalone windows binaries
+      - name: Publish-win64
+        run: dotnet publish CLI/MCGalaxyCLI_dotnet8.csproj -r win-x64 --self-contained
+          
+      - uses: ./.github/actions/upload_build
+        if: ${{ always() && steps.compile_net.outcome == 'success' }}
+        with:
+          SOURCE_FILE: 'CLI/bin/Debug/net8.0/win-x64/publish'
+          DEST_NAME: 'MCGalaxy-win64-standalone'
+          
+      # publish standalone linux binaries
+      - name: Publish-linux64
+        run: dotnet publish CLI/MCGalaxyCLI_dotnet8.csproj -r linux-x64 --self-contained
+          
+      - uses: ./.github/actions/upload_build
+        if: ${{ always() && steps.compile_net.outcome == 'success' }}
+        with:
+          SOURCE_FILE: 'CLI/bin/Debug/net8.0/linux-x64/publish'
+          DEST_NAME: 'MCGalaxy-linux64-standalone'
+          
+      # publish standalone macOS binaries
+      - name: Publish-mac64
+        run: dotnet publish CLI/MCGalaxyCLI_dotnet8.csproj -r osx-x64 --self-contained
+          
+      - uses: ./.github/actions/upload_build
+        if: ${{ always() && steps.compile_net.outcome == 'success' }}
+        with:
+          SOURCE_FILE: 'CLI/bin/Debug/net8.0/osx-x64/publish'
+          DEST_NAME: 'MCGalaxy-mac64-standalone'
