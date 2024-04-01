@@ -224,23 +224,38 @@ namespace MCGalaxy
         public void ProcessMovement(int x, int y, int z, byte yaw, byte pitch, int held) {
             if (held >= 0) ClientHeldBlock = (BlockID)held;
 
-            if (trainGrab || following.Length > 0) { CheckBlocks(Pos, Pos); return; }
+            if (Session.Ping.IgnorePosition || Loading) { return; }
+            if (trainGrab || following.Length > 0) { CheckBlocks(Pos, Pos); return; } // Doesn't check zones? Potential bug
+
             Position next = new Position(x, y, z);
+            ProcessMovementCore(next, yaw, pitch, true);
+        }
+
+        /// <summary>
+        /// Called to update player's position and check blocks and zones.
+        /// If fromClient is true, calls OnPlayerMove event and updates AFK status.
+        /// </summary>
+        internal void ProcessMovementCore(Position next, byte yaw, byte pitch, bool fromClient) {
+
             CheckBlocks(Pos, next);
 
-            bool cancel = false;
-            OnPlayerMoveEvent.Call(this, next, yaw, pitch, ref cancel);
-            if (cancel) { cancel = false; return; }
-            
+            if (fromClient) {
+                bool cancel = false;
+                OnPlayerMoveEvent.Call(this, next, yaw, pitch, ref cancel);
+                if (cancel) { cancel = false; return; }
+            }
+
             Pos = next;
             SetYawPitch(yaw, pitch);
             CheckZones(next);
-            
-            if (!Moved() || Loading) return;
-            if (DateTime.UtcNow < AFKCooldown) return;
-            
-            LastAction = DateTime.UtcNow;
-            if (IsAfk) CmdAfk.ToggleAfk(this, "");
+
+            if (fromClient) {
+                if (!Moved()) return;
+                if (DateTime.UtcNow < AFKCooldown) return;
+
+                LastAction = DateTime.UtcNow;
+                if (IsAfk) CmdAfk.ToggleAfk(this, "");
+            }
         }
         
         void CheckZones(Position pos) {
@@ -404,6 +419,11 @@ namespace MCGalaxy
             
             // Put this after vote collection so that people can vote even when chat is moderated
             if (!CheckCanSpeak("speak")) return;
+            if (Ignores.All) {
+                Message("Your message wasn't sent because you're ignoring all chat.");
+                Message("Use &T/ignore all &Sagain to toggle chat back on.");
+                return;
+            }
 
             if (ChatModes.Handle(this, text)) return;
             text = HandleJoker(text);
@@ -645,7 +665,7 @@ namespace MCGalaxy
             try { //opstats patch (since 5.5.11)
                 if (Server.Opstats.CaselessContains(cmd) || (cmd.CaselessEq("review") && args.CaselessEq("next") && Server.reviewlist.Count > 0)) {
                     Database.AddRow("Opstats", "Time, Name, Cmd, Cmdmsg",
-                                    DateTime.Now.ToString(Database.DateFormat), name, cmd, args);
+                                    DateTime.Now.ToInvariantDateString(), name, cmd, args);
                 }
             } catch { }
             

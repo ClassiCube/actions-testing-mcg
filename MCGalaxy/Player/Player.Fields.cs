@@ -15,7 +15,9 @@ permissions and limitations under the Licenses.
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using MCGalaxy.Drawing;
+using MCGalaxy.Drawing.Brushes;
 using MCGalaxy.Drawing.Transforms;
 using MCGalaxy.Events.PlayerEvents;
 using MCGalaxy.Games;
@@ -50,10 +52,12 @@ namespace MCGalaxy {
         public bool IsAfk, AutoAfk;
         public bool cmdTimer;
         public bool UsingWom;
-        public string BrushName = "Normal", DefaultBrushArgs = "";
-        public Transform Transform = NoTransform.Instance;
         public string afkMessage;
         public bool ClickToMark = true;
+        
+        public string BrushName    = Brush.DefaultBrush;
+        public Transform Transform = Transform.DefaultTransform;
+        public string DefaultBrushArgs = "";
 
         /// <summary> Account name of the user, plus a trailing '+' if ClassiCubeAccountPlus is enabled </summary>
         /// <remarks> Use 'truename' for displaying/logging, use 'name' for storing data </remarks>
