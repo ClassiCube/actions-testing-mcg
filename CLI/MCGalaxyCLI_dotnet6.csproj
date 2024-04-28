@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
+    <DefineConstants>$(DefineConstants);$(ExtraConstants)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

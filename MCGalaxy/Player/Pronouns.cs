@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using MCGalaxy.Tasks;
 
@@ -36,7 +35,6 @@ namespace MCGalaxy {
         /// <summary>
         /// Called once to initialize the defaults and write/read the config file as necessary.
         /// </summary>
-        /// <param name="task"></param>
         public static void Init(SchedulerTask task) {
 
             if (!Directory.Exists(PLAYER_PATH)) {
@@ -119,13 +117,15 @@ namespace MCGalaxy {
             string myPath = PlayerPath(playerName);
             try {
 
-                string[] lines;
+                string data;
                 lock (locker) {
                     if (!File.Exists(myPath)) { return Default; }
-                    lines = File.ReadAllLines(myPath);
-                }
-                if (lines.Length == 0 || string.IsNullOrWhiteSpace(lines[0])) { return Default; }
-                Pronouns p = FindExact(lines[0]);
+                    data = File.ReadAllText(myPath);
+                }				
+                data = data.Trim();		
+				
+                if (data.Length == 0) return Default;
+                Pronouns p = FindExact(data);
                 if (p != null) return p;
                 return Default;
 
@@ -221,7 +221,7 @@ namespace MCGalaxy {
             string path = PlayerPath(p.name);
             try {
                 //Reduce clutter by simply erasing the file if it's default
-                if (this.Name == Default.Name) { File.Delete(path); return; }
+                if (this == Default) { File.Delete(path); return; }
 
                 File.WriteAllText(path, Name);
             } catch (Exception e) {
