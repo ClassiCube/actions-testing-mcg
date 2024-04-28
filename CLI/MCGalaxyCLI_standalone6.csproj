@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
+    <DefineConstants>$(DefineConstants);MCG_STANDALONE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
