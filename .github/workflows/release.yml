@@ -20,14 +20,14 @@ jobs:
 #          
       - name: Retrieve .NET 2.0 binaries
         run: |
-          mkdir net20
+          mkdir mcg-net20
           wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxy_.dll   -O mcg-net20/MCGalaxy_.dll
           wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxyCLI.exe -O mcg-net20/MCGalaxyCLI.exe
           wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxy.exe    -O mcg-net20/MCGalaxy.exe
           
       - name: Retrieve .NET 4.0 binaries
         run: |
-          mkdir net40
+          mkdir mcg-net40
           wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy_.dll   -O mcg-net40/MCGalaxy_.dll
           wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxyCLI.exe -O mcg-net40/MCGalaxyCLI.exe
           wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy.exe    -O mcg-net40/MCGalaxy.exe
@@ -35,7 +35,7 @@ jobs:
           
       - name: Retrieve .NET 4.0 (768 blocks) binaries
         run: |
-          mkdir infid
+          mkdir mcg-infid
           wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy_infid.dll -O mcg-infid/MCGalaxy_.dll
           wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxyCLI.exe    -O mcg-infid/MCGalaxyCLI.exe
           wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy.exe       -O mcg-infid/MCGalaxy.exe
