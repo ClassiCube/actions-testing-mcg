@@ -102,7 +102,7 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'mcg-net40
+          SOURCE_FILE: 'mcg-net40'
           DEST_NAME: 'mcg-net40'
           
       - uses: ./.github/actions/upload_build
