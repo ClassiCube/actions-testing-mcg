@@ -96,19 +96,19 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'mcg-net20/MCGalaxy'
+          SOURCE_FILE: 'mcg-net20'
           DEST_NAME: 'mcg-net20'
           
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'mcg-net40/MCGalaxy'
+          SOURCE_FILE: 'mcg-net40
           DEST_NAME: 'mcg-net40'
           
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'mcg-infid/MCGalaxy'
+          SOURCE_FILE: 'mcg-infid'
           DEST_NAME: 'mcg-infid'
           
           
