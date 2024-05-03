@@ -12,45 +12,44 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Retrieve supporting files
-        run: |
-          wget https://raw.githubusercontent.com/ClassiCube/MCGalaxy/master/sqlite3_x32.dll
-          wget https://raw.githubusercontent.com/ClassiCube/MCGalaxy/master/sqlite3_x64.dll
-          wget https://raw.githubusercontent.com/ClassiCube/MCGalaxy/master/MySql.Data.dll
-          
+#      - name: Retrieve supporting files
+#        run: |
+#          wget https://raw.githubusercontent.com/ClassiCube/MCGalaxy/master/sqlite3_x32.dll
+#          wget https://raw.githubusercontent.com/ClassiCube/MCGalaxy/master/sqlite3_x64.dll
+#          wget https://raw.githubusercontent.com/ClassiCube/MCGalaxy/master/MySql.Data.dll
+#          
       - name: Retrieve .NET 2.0 binaries
         run: |
           mkdir net20
-          wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxy_.dll   -O net20/MCGalaxy_.dll
-          wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxyCLI.exe -O net20/MCGalaxyCLI.exe
-          wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxy.exe    -O net20/MCGalaxy.exe
+          wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxy_.dll   -O mcg-net20/MCGalaxy_.dll
+          wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxyCLI.exe -O mcg-net20/MCGalaxyCLI.exe
+          wget https://cdn.classicube.net/client/mcg/latest/net20/MCGalaxy.exe    -O mcg-net20/MCGalaxy.exe
           
       - name: Retrieve .NET 4.0 binaries
         run: |
           mkdir net40
-          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy_.dll   -O net40/MCGalaxy_.dll
-          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxyCLI.exe -O net40/MCGalaxyCLI.exe
-          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy.exe    -O net40/MCGalaxy.exe
+          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy_.dll   -O mcg-net40/MCGalaxy_.dll
+          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxyCLI.exe -O mcg-net40/MCGalaxyCLI.exe
+          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy.exe    -O mcg-net40/MCGalaxy.exe
           
           
       - name: Retrieve .NET 4.0 (768 blocks) binaries
         run: |
           mkdir infid
-          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy_infid.dll -O infid/MCGalaxy_.dll
-          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxyCLI.exe    -O infid/MCGalaxyCLI.exe
-          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy.exe       -O infid/MCGalaxy.exe
+          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy_infid.dll -O mcg-infid/MCGalaxy_.dll
+          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxyCLI.exe    -O mcg-infid/MCGalaxyCLI.exe
+          wget https://cdn.classicube.net/client/mcg/latest/net40/MCGalaxy.exe       -O mcg-infid/MCGalaxy.exe
           
       - name: Retrieve standalone binaries
         run: |
-          wget https://cdn.classicube.net/client/mcg/latest/mcg-win64-standalone.exe -O mcg-win64
-          wget https://cdn.classicube.net/client/mcg/latest/mcg-mac64-standalone     -O mcg-mac64
-          wget https://cdn.classicube.net/client/mcg/latest/mcg-linux64-standalone   -O mcg-linux64
+          wget https://cdn.classicube.net/client/mcg/latest/win64   -O mcg-win64
+          wget https://cdn.classicube.net/client/mcg/latest/mac64   -O mcg-mac64
+          wget https://cdn.classicube.net/client/mcg/latest/linux64 -O mcg-linux64
           
       - name: Generate builds
         id: compile
         shell: bash
         run: |
-           
           make_dotnet_zip() {
             cp sqlite3_x32.dll $1/sqlite3_x32.dll
             cp sqlite3_x64.dll $1/sqlite3_x64.dll
@@ -69,10 +68,11 @@ jobs:
             zip $1.zip MCGalaxy.exe sqlite3_x32.dll sqlite3_x64.dll
           }
           
-          make_dotnet_zip net20
-          make_dotnet_zip net40
-          make_dotnet_zip infid
+          make_dotnet_zip mcg-net20
+          make_dotnet_zip mcg-net40
+          make_dotnet_zip mcg-infid
           
+          mv MCGalaxy mcg_source
           make_standalone_zip mcg-win64
           make_standalone_tar mcg-mac64
           make_standalone_tar mcg-linux64
@@ -91,19 +91,19 @@ jobs:
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'net20.zip'
+          SOURCE_FILE: 'mcg-net20.zip'
           DEST_NAME: 'mcg-net20.zip'
           
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'net40.zip'
+          SOURCE_FILE: 'mcg-net40.zip'
           DEST_NAME: 'mcg-net40.zip'
           
       - uses: ./.github/actions/upload_build
         if: ${{ always() && steps.compile.outcome == 'success' }}
         with:
-          SOURCE_FILE: 'infid.zip'
+          SOURCE_FILE: 'mcg-infid.zip'
           DEST_NAME: 'mcg-infid.zip'
           
           
